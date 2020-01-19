@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AssignmentModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="AssignmentModelStoreContainer">
+    <EntitySet Name="Users" EntityType="AssignmentModel.Store.Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Organisers" EntityType="AssignmentModel.Store.Organisers" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Bookings" EntityType="AssignmentModel.Store.Bookings" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="EventTypes" EntityType="AssignmentModel.Store.EventTypes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Events" EntityType="AssignmentModel.Store.Events" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="UserBooking" Association="AssignmentModel.Store.UserBooking">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Booking" EntitySet="Bookings" />
+    </AssociationSet>
+    <AssociationSet Name="OrganiserEvent" Association="AssignmentModel.Store.OrganiserEvent">
+      <End Role="Organiser" EntitySet="Organisers" />
+      <End Role="Event" EntitySet="Events" />
+    </AssociationSet>
+    <AssociationSet Name="EventTypeEvent" Association="AssignmentModel.Store.EventTypeEvent">
+      <End Role="EventType" EntitySet="EventTypes" />
+      <End Role="Event" EntitySet="Events" />
+    </AssociationSet>
+    <AssociationSet Name="BookingEvent" Association="AssignmentModel.Store.BookingEvent">
+      <End Role="Booking" EntitySet="Bookings" />
+      <End Role="Event" EntitySet="Events" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="userEmail" />
+    </Key>
+    <Property Name="userEmail" Type="nvarchar(max)" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="password" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Organisers">
+    <Key>
+      <PropertyRef Name="organiserEmail" />
+    </Key>
+    <Property Name="organiserEmail" Type="nvarchar(max)" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="organiserName" Type="time" Nullable="false" />
+    <Property Name="password" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Bookings">
+    <Key>
+      <PropertyRef Name="userEmail" />
+      <PropertyRef Name="eventName" />
+      <PropertyRef Name="eventDate" />
+      <PropertyRef Name="eventTime" />
+    </Key>
+    <Property Name="userEmail" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="eventTime" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="eventDate" Type="datetime" Nullable="false" />
+    <Property Name="eventName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="bookingDate" Type="datetime" Nullable="false" />
+    <Property Name="seatCount" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="EventTypes">
+    <Key>
+      <PropertyRef Name="eventTypeId" />
+    </Key>
+    <Property Name="eventTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="eventName" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Events">
+    <Key>
+      <PropertyRef Name="eventName" />
+      <PropertyRef Name="eventDate" />
+      <PropertyRef Name="eventTime" />
+    </Key>
+    <Property Name="eventName" Type="nvarchar(max)" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="eventDate" Type="datetime" Nullable="false" />
+    <Property Name="eventTime" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="street" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="suburb" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="postCode" Type="int" Nullable="false" />
+    <Property Name="city" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="latitude" Type="decimal" Nullable="false" />
+    <Property Name="longitude" Type="decimal" Nullable="false" />
+    <Property Name="seatCapacity" Type="int" Nullable="true" />
+    <Property Name="organiserEmail" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="eventTypeId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="UserBooking">
+    <End Role="User" Type="AssignmentModel.Store.Users" Multiplicity="1" />
+    <End Role="Booking" Type="AssignmentModel.Store.Bookings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="userEmail" />
+      </Principal>
+      <Dependent Role="Booking">
+        <PropertyRef Name="userEmail" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OrganiserEvent">
+    <End Role="Organiser" Type="AssignmentModel.Store.Organisers" Multiplicity="1" />
+    <End Role="Event" Type="AssignmentModel.Store.Events" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Organiser">
+        <PropertyRef Name="organiserEmail" />
+      </Principal>
+      <Dependent Role="Event">
+        <PropertyRef Name="organiserEmail" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="EventTypeEvent">
+    <End Role="EventType" Type="AssignmentModel.Store.EventTypes" Multiplicity="1" />
+    <End Role="Event" Type="AssignmentModel.Store.Events" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EventType">
+        <PropertyRef Name="eventTypeId" />
+      </Principal>
+      <Dependent Role="Event">
+        <PropertyRef Name="eventTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="BookingEvent">
+    <End Role="Booking" Type="AssignmentModel.Store.Bookings" Multiplicity="*" />
+    <End Role="Event" Type="AssignmentModel.Store.Events" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Event">
+        <PropertyRef Name="eventName" />
+        <PropertyRef Name="eventDate" />
+        <PropertyRef Name="eventTime" />
+      </Principal>
+      <Dependent Role="Booking">
+        <PropertyRef Name="eventName" />
+        <PropertyRef Name="eventDate" />
+        <PropertyRef Name="eventTime" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
